@@ -1,0 +1,309 @@
+using System.Collections;
+
+namespace GestãodeEquipamentos.ConsoleApp
+{
+    internal class Program
+    {
+        static ArrayList nomes = new ArrayList();
+        static ArrayList idsEquipamentos = new ArrayList();
+        static ArrayList numerosDeSerie = new ArrayList();
+        static ArrayList precos = new ArrayList();
+        static ArrayList fabricantes = new ArrayList();
+        static ArrayList datasDeFabricacao = new ArrayList();
+
+        static int opcaoEquipamento = 0;
+        static int opcaoChamado = 0;
+        static int opcaoMenus = 0;
+
+        static int idEquipamento = idsEquipamentos.Count + 1;
+
+        static ArrayList titulos = new ArrayList();
+        static ArrayList descricoesChamados = new ArrayList();
+        static ArrayList equipamentos = new ArrayList();
+        static ArrayList dataDeAbertura = new ArrayList();
+        static ArrayList idChamados = new ArrayList();
+
+        static int contadorIdchamados = 0;
+
+        static void Main()
+        {
+
+
+            while (opcaoMenus != 3)
+            {
+                Console.Clear();
+
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                Console.WriteLine("(1) Gerenciar Chamados");
+                Console.WriteLine("(2) Gerenciar Equipamentos");
+                Console.WriteLine("(3) Sair");
+                opcaoMenus = int.Parse(Console.ReadLine());
+                Console.ResetColor();
+
+                int opcaoEquipamento = 0;
+                int opcaoChamado = 0;
+
+                switch (opcaoMenus)
+                {
+                    case 1:
+                        while (opcaoChamado != 5)
+                        {
+                            Console.Clear();
+
+                            Console.WriteLine("Selecione uma opção: ");
+                            Console.WriteLine("(1) Registrar chamado");
+                            Console.WriteLine("(2) Visualizar chamados registrados");
+                            Console.WriteLine("(3) Editar um chamado");
+                            Console.WriteLine("(4) Excluir um chamado");
+                            Console.WriteLine("(5) Voltar ao Menu Principal");
+                            opcaoChamado = int.Parse(Console.ReadLine());
+
+                            switch (opcaoChamado)
+                            {
+                                case 1:
+                                    CriarChamado(titulos, descricoesChamados, equipamentos, dataDeAbertura, idChamados);
+                                    break;
+                                case 2:
+                                    ListarChamados();
+                                    break;
+                                case 3:
+                                    EditarChamado(titulos, descricoesChamados, equipamentos, dataDeAbertura, idChamados);
+                                    break;
+                                case 4:
+                                    RemoverChamado(titulos, descricoesChamados, equipamentos, dataDeAbertura, idChamados);
+                                    break;
+                                case 5:
+                                    Console.ForegroundColor = ConsoleColor.Cyan;
+                                    Console.WriteLine("|Voltando...|");
+                                    Console.ResetColor();
+                                    continue;
+                            }
+                            Console.ReadLine();
+                        }
+                        break;
+
+                    case 2:
+                        while (opcaoEquipamento != 5)
+                        {
+                            Console.Clear();
+
+                            Console.WriteLine("Selecione uma opção: ");
+                            Console.WriteLine("(1) Registrar equipamento");
+                            Console.WriteLine("(2) Visualizar equipamentos registrados");
+                            Console.WriteLine("(3) Editar um equipamento");
+                            Console.WriteLine("(4) Excluir um equipamento");
+                            Console.WriteLine("(5) Sair");
+                            opcaoEquipamento = int.Parse(Console.ReadLine());
+
+                            switch (opcaoEquipamento)
+                            {
+                                case 1:
+                                    CriarEquipamento(nomes, precos, idsEquipamentos, fabricantes, numerosDeSerie, datasDeFabricacao); break;
+
+                                case 2:
+                                    VisualizarEquipamentosRegistrados(nomes, precos, fabricantes, datasDeFabricacao, numerosDeSerie, idsEquipamentos); break;
+
+                                case 3:
+                                    EditarEquipamento(nomes, precos, fabricantes, datasDeFabricacao, numerosDeSerie, idsEquipamentos); break;
+
+                                case 4:
+                                    ExcluirEquipamento(nomes, precos, fabricantes, datasDeFabricacao, numerosDeSerie, idsEquipamentos); break;
+                            }
+                        }
+                        break;
+                }
+            }
+        }
+        static void CriarEquipamento(ArrayList nomes, ArrayList precos, ArrayList idsEquipamentos, ArrayList numerosDeSerie, ArrayList fabricantes, ArrayList datasDeFabricacao)
+
+        {
+
+            Console.WriteLine("Digite o nome do equipamento: ");
+            string nome = Console.ReadLine();
+            Console.WriteLine("Digite o preço de aquisição do equipamento: ");
+            double preco = double.Parse(Console.ReadLine());
+            Console.WriteLine("Digite o número de série do equipamento: ");
+            string numeroSerie = Console.ReadLine();
+            Console.WriteLine("Digite a data de fabricação do equipamento: ");
+            string dataFabricacao = Console.ReadLine();
+            Console.WriteLine("Digite o fabricante do equipamento: ");
+            string fabricante = Console.ReadLine();
+
+
+            if (nome.Length < 6)
+            {
+                Console.WriteLine("O nome do equipamento deve ter no mínimo 6 caracteres.");
+            }
+            else
+            {
+                nomes.Add(nome);
+                precos.Add(preco);
+                idsEquipamentos.Add(idEquipamento);
+                numerosDeSerie.Add(numeroSerie);
+                fabricantes.Add(fabricante);
+                datasDeFabricacao.Add(dataFabricacao);
+
+                Console.WriteLine("Equipamento registrado com sucesso!");
+            }
+            idEquipamento++;
+        }
+
+        static void VisualizarEquipamentosRegistrados(ArrayList nomes, ArrayList precos, ArrayList numerosDeSerie, ArrayList fabricantes, ArrayList datasDeFabricacao, ArrayList idsEquipamentos)
+        {
+            for (int i = 0; i < nomes.Count; i++)
+            {
+                Console.WriteLine("{0,-3}|{1,-12}|{2,-8}|{3,-11}|{4,-20}|", nomes[i], precos[i], numerosDeSerie[i], fabricantes[i], datasDeFabricacao[i], idsEquipamentos[i]);
+                Console.ReadLine();
+            }
+        }
+
+        static void EditarEquipamento(ArrayList nomes, ArrayList precos, ArrayList numerosDeSerie, ArrayList datasDeFabricacao, ArrayList fabricantes, ArrayList idsEquipamentos)
+        {
+            Console.WriteLine("Qual equipamento voce deseja editar? (determine o ID) ");
+            int id = int.Parse(Console.ReadLine());
+
+            while (idsEquipamentos.Contains(id) == false);
+            {
+                Console.WriteLine("Este equeipamento não foi encontrado. digite um novamento o ID:");
+                id = int.Parse(Console.ReadLine());
+            }
+
+            Console.WriteLine("Digite o novo nome do equipamento: ");
+            string novoNome = Console.ReadLine();
+            Console.WriteLine("Digite o novo preço de aquisição do equipamento: ");
+            double novoPreco = double.Parse(Console.ReadLine());
+            Console.WriteLine("Digite o novo número de série do equipamento: ");
+            string novoNumeroSerie = Console.ReadLine();
+            Console.WriteLine("Digite a nova data de fabricação do equipamento: ");
+            string novaDataFabricacao = Console.ReadLine();
+            Console.WriteLine("Digite o novo fabricante do equipamento: ");
+            string novoFabricante = Console.ReadLine();
+
+            int posicao = idsEquipamentos.IndexOf(id);
+
+            nomes[posicao] = novoNome;
+            precos[posicao] = novoPreco;
+            numerosDeSerie[posicao] = novoNumeroSerie;
+            fabricantes[posicao] = novoFabricante;
+            datasDeFabricacao[posicao] = novaDataFabricacao;
+
+        }
+
+        static void ExcluirEquipamento(ArrayList nomes, ArrayList precos, ArrayList numerosDeSerie, ArrayList datasDeFabricacao, ArrayList fabricantes, ArrayList idsEquipamentos)
+        {
+            Console.WriteLine("Qual equipamento voce deseja excluir? (determine o ID): ");
+            int idParaExcluir = int.Parse(Console.ReadLine());
+
+            while(idsEquipamentos.Contains(idParaExcluir) == false)
+            {
+                Console.WriteLine("Equipamento não encontrado!");
+                Console.WriteLine();
+                Console.WriteLine("Qual equipamento voce deseja excluir? (determine o ID):");
+                idParaExcluir = int.Parse(Console.ReadLine());
+            }
+           
+        }
+
+        static void CriarChamado(ArrayList titulos, ArrayList descricoesChamados, ArrayList equipamentos, ArrayList dataDeAbertura, ArrayList idChamados)
+        {
+            Console.Clear();
+
+            Console.WriteLine("Digite o título do chamado: ");
+            string titulo = Console.ReadLine();
+            Console.WriteLine("Digite a descrição do chamado: ");
+            string descricao = Console.ReadLine();
+            Console.WriteLine("Digite o id do equipamento deste chamado: ");
+            string equipamentoId = (Console.ReadLine());
+            Console.WriteLine("Digite a data de abertura do chamado: ");
+            string dataAbertura = Console.ReadLine();
+
+
+            titulos.Add(titulo);
+            descricoesChamados.Add(descricao);
+            equipamentos.Add(equipamentoId);
+            dataDeAbertura.Add(dataAbertura);
+            idChamados.Add(contadorIdchamados);
+
+            contadorIdchamados++;
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("|Chamado registrado com sucesso!|");
+            Console.ResetColor();
+
+        }
+
+        static void ListarChamados()
+        {
+            Console.Clear();
+            Console.WriteLine("Chamados registrados:");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("ID |        TITULO          | EQUIPAMENTO |     DATA DE ABERTURA     |");
+            Console.ResetColor();
+
+            for (int i = 0; i < idChamados.Count; i++)
+            {
+                int posicaoIdChamados = (int)idChamados[i];
+
+                int posicao = equipamentos. IndexOf(posicaoIdChamados);
+                Console.WriteLine("{0,-3}|{1,-24}|{2,-13}|{3,-26}|", idChamados[i], titulos[i], nomes[posicaoIdChamados], dataDeAbertura[i]);
+            }
+        }
+
+        static void EditarChamado(ArrayList titulos, ArrayList descricoesChamados, ArrayList equipamentos, ArrayList dataDeAbertura, ArrayList idChamados)
+        {
+            
+            Console.WriteLine("Qual chamado você deseja editar? (determine o ID) ");
+            int idEditar = int.Parse(Console.ReadLine());
+
+            while (idChamados.Contains(idEditar) == false)
+            {
+                Console.WriteLine("Este ID não existe, digite um ID existente: ");
+                idEditar = int.Parse(Console.ReadLine());
+            }
+
+            Console.WriteLine("Digite o novo título do chamado: ");
+            string novotitulo = Console.ReadLine();
+            Console.WriteLine("Digite o id do equipamento deste chamado: ");
+            int equipamento = int.Parse(Console.ReadLine());
+            Console.WriteLine("Digite a nova descrição do chamado: ");
+            string novaDescricao = Console.ReadLine();
+            Console.WriteLine("Digite a nova data de abertura do chamado: ");
+            string novaDataAbertura = Console.ReadLine();
+
+            int posicao = idChamados.IndexOf(idEditar);
+
+
+            titulos[posicao] = novotitulo;
+            equipamentos[posicao] = equipamento;
+            descricoesChamados[posicao] = novaDescricao;
+            dataDeAbertura[posicao] = novaDataAbertura;
+
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("|Chamado atualizado com sucesso!|");
+            Console.ResetColor();
+        }
+        static void RemoverChamado(ArrayList titulos, ArrayList descricoesChamados, ArrayList equipamentos, ArrayList dataDeAbertura, ArrayList idChamados)
+        {
+            Console.WriteLine("Digite o ID do chamado que deseja excluir: ");
+            int idParaExcluir = int.Parse(Console.ReadLine());
+
+            while (idChamados.Contains(idParaExcluir) == false);
+            {
+                Console.WriteLine("Chamado não existe!");
+                Console.WriteLine();
+                Console.WriteLine("Digite o ID que deseja excluir: ");
+                idParaExcluir = int.Parse(Console.ReadLine());
+            }
+
+            int posicao = idChamados.IndexOf(idParaExcluir);
+
+            titulos.RemoveAt(posicao);
+            descricoesChamados.RemoveAt(posicao);
+            equipamentos.RemoveAt(posicao);
+            dataDeAbertura.RemoveAt(posicao);
+            idChamados.RemoveAt(posicao);
+
+        }
+    }
+}
